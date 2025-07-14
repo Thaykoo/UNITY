@@ -327,7 +327,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
@@ -345,7 +345,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  damage: 50
+  damage: 5
   maxHP: 20
   experienceOrbPrefab: {fileID: 2220065570438463539, guid: e7ad420a44da384b1ab26ecddc48e3c4, type: 3}
   healthBar: {fileID: 6022963854647467808}
