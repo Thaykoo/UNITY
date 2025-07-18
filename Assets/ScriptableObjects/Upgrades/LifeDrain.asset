@@ -15,9 +15,10 @@ MonoBehaviour:
   upgradeName: LifeDrain
   icon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   type: 1
-  baseDamage: 20
+  baseDamage: 10
   cooldown: 5
   duration: 0
+  projectileSpeed: 8
   radius: 5
   currentLevel: 1
   maxLevel: 5

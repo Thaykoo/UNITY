@@ -7,14 +7,6 @@ public class PlayerAbilityManager : MonoBehaviour
 {
     public static PlayerAbilityManager instance;
 
-    void Awake()
-    {
-        if (instance != null && instance != this)
-            Destroy(gameObject);
-        else
-            instance = this;
-    }
-
     [Header("Prefabs")]
     public GameObject fireballPrefab;
     public GameObject shotSpherePrefab;
@@ -23,98 +15,114 @@ public class PlayerAbilityManager : MonoBehaviour
     [Header("Enemy Layer")]
     public LayerMask enemyLayer;
 
-    Dictionary<UpgradeType, UpgradeSO> activeUpgrades = new();
+    // Stocke les upgrades actives et leurs niveaux
+    private Dictionary<UpgradeType, PlayerUpgrade> activeUpgrades = new();
 
-    public void ApplyUpgrade(UpgradeSO so)
+    void Awake()
     {
-        if (!activeUpgrades.ContainsKey(so.type))
+        if (instance != null && instance != this)
+            Destroy(gameObject);
+        else
+            instance = this;
+    }
+
+    /// <summary>
+    /// Applique ou améliore une upgrade.
+    /// </summary>
+    public void ApplyUpgrade(UpgradeType type)
+    {
+        if (activeUpgrades.ContainsKey(type))
         {
-            var clone = Instantiate(so);
-            activeUpgrades[so.type] = clone;
-            InitializeAbility(clone);
+            // Amélioration de niveau
+            activeUpgrades[type].LevelUp();
         }
         else
         {
-            var existing = activeUpgrades[so.type];
-            existing.LevelUp();
-            UpdateAbility(existing);
+            // Première acquisition avec stats de base
+            var upgrade = new PlayerUpgrade
+            {
+                type = type,
+                baseDamage = 20f,
+                cooldown = 1f,
+                radius = 3f,
+                projectileSpeed = 15f
+            };
+            activeUpgrades[type] = upgrade;
+            LaunchAttack(type);
         }
     }
 
-    void InitializeAbility(UpgradeSO so)
+    /// <summary>
+    /// Renvoie le niveau courant d’une upgrade (0 si non débloquée).
+    /// </summary>
+    public int GetUpgradeLevel(UpgradeType type)
     {
-        switch (so.type)
+        if (activeUpgrades.TryGetValue(type, out var upgrade))
+            return upgrade.level;
+        return 0;
+    }
+
+    void LaunchAttack(UpgradeType type)
+    {
+        switch (type)
         {
             case UpgradeType.Fireball:
-                StartCoroutine(FireballRoutine(so));
+                StartCoroutine(FireballRoutine());
                 break;
-
             case UpgradeType.Shot:
-                StartCoroutine(ShotRoutine(so));
+                StartCoroutine(ShotRoutine());
                 break;
-
             case UpgradeType.LifeDrain:
-                SpawnLifeDrainOrbs(so);
+                SpawnLifeDrainOrbs();
                 break;
         }
     }
 
-    void UpdateAbility(UpgradeSO so)
+    IEnumerator FireballRoutine()
     {
-        if (so.type == UpgradeType.Shot)
-        {
-            var atk = GetComponent<PlayerAttack>();
-            atk.attackDamage = so.baseDamage;
-            atk.attackRange = so.radius;
-            atk.attackCooldown = so.cooldown;
-        }
-    }
+        var up = activeUpgrades[UpgradeType.Fireball];
 
-    IEnumerator FireballRoutine(UpgradeSO so)
-    {
         while (true)
         {
             var enemies = FindObjectsOfType<EnemyController>()
                           .Select(e => e.transform)
                           .ToArray();
-
             if (enemies.Length > 0)
             {
-                var closest = enemies
-                              .OrderBy(t => Vector3.Distance(transform.position, t.position))
-                              .First();
-
+                var closest = enemies.OrderBy(t => Vector3.Distance(transform.position, t.position)).First();
                 var go = Instantiate(fireballPrefab, transform.position, Quaternion.identity);
                 go.GetComponent<FireballProjectile>()
-                  .Initialize(closest, so.projectileSpeed, so.baseDamage);
+                  .Initialize(closest, up.projectileSpeed, (int)up.baseDamage);
             }
-
-            yield return new WaitForSeconds(so.cooldown);
+            yield return new WaitForSeconds(up.cooldown);
         }
     }
 
-    IEnumerator ShotRoutine(UpgradeSO so)
+    IEnumerator ShotRoutine()
     {
+        var up = activeUpgrades[UpgradeType.Shot];
+
         while (true)
         {
             var go = Instantiate(shotSpherePrefab, transform.position + transform.forward, Quaternion.identity);
-            go.GetComponent<ShotProjectile>().Initialize(transform.forward, so.projectileSpeed, so.baseDamage);
-            yield return new WaitForSeconds(so.cooldown);
+            go.GetComponent<ShotProjectile>()
+              .Initialize(transform.forward, up.projectileSpeed, (int)up.baseDamage);
+            yield return new WaitForSeconds(up.cooldown);
         }
     }
 
-    void SpawnLifeDrainOrbs(UpgradeSO so)
+    void SpawnLifeDrainOrbs()
     {
+        var up = activeUpgrades[UpgradeType.LifeDrain];
         int orbCount = 4;
         float angleStep = 2 * Mathf.PI / orbCount;
 
         for (int i = 0; i < orbCount; i++)
         {
             float angle = i * angleStep;
-
             var orb = Instantiate(lifeDrainOrbPrefab, transform.position, Quaternion.identity);
             orb.GetComponent<LifeDrainOrb>()
-               .Initialize(transform, angle, so.radius, 2f, so.baseDamage, GetComponent<Health>());
+               .Initialize(transform, angle, up.radius, 2f, (int)up.baseDamage, GetComponent<Health>());
         }
     }
 }
