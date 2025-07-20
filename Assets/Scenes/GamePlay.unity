@@ -636,9 +636,10 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 1
-  spawnInterval: 3
-  spawnRadius: 3
+  spawnInterval: 8
+  spawnRadius: 25
   maxRayHeight: 10
+  spawnCount: 3
 --- !u!4 &199897436
 Transform:
   m_ObjectHideFlags: 0
