@@ -8,7 +8,7 @@ public class UpgradeHandler : MonoBehaviour
     public void Apply(UpgradeSO upg)
     {
         chosen = upg;
-        lastUse = Time.time - upg.cooldown; // prêt à tirer
+        lastUse = Time.time - upg.cooldown;
     }
 
     void Update()
@@ -23,16 +23,13 @@ public class UpgradeHandler : MonoBehaviour
 
     void Use(UpgradeSO upg)
     {
-        switch(upg.upgradeName)
+        switch (upg.upgradeName)
         {
             case "Fireball":
-                // instancier une boule, target automatique…
                 break;
             case "LifeDrain":
-                // OverlapCircleAll + dégâts + heal…
                 break;
             case "Shot":
-                // Raycast devant + dégâts
                 break;
         }
     }

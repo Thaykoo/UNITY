@@ -30,20 +30,16 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        // 1) Choix d'un point XZ aléatoire autour du spawner
         Vector2 circle = Random.insideUnitCircle * spawnRadius;
         Vector3 targetXZ = transform.position + new Vector3(circle.x, 0f, circle.y);
 
-        // 2) Raycast vers le bas pour trouver la position exacte du sol
         Vector3 rayStart = targetXZ + Vector3.up * maxRayHeight;
         if (Physics.Raycast(rayStart, Vector3.down, out RaycastHit hit, maxRayHeight * 2f, groundLayer))
         {
-            // Spawn exactement au contact du sol
             Instantiate(enemyPrefab, hit.point, Quaternion.identity);
         }
         else
         {
-            // Si le Raycast échoue, on spawne au niveau Y = 0 (sol par défaut)
             Vector3 fallbackPos = new Vector3(targetXZ.x, 0f, targetXZ.z);
             Instantiate(enemyPrefab, fallbackPos, Quaternion.identity);
         }

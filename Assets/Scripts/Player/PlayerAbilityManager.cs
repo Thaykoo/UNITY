@@ -7,15 +7,12 @@ public class PlayerAbilityManager : MonoBehaviour
 {
     public static PlayerAbilityManager instance;
 
-    [Header("Prefabs")]
     public GameObject fireballPrefab;
     public GameObject shotSpherePrefab;
     public GameObject lifeDrainOrbPrefab;
 
-    [Header("Enemy Layer")]
     public LayerMask enemyLayer;
 
-    // Stocke les upgrades actives et leurs niveaux
     private Dictionary<UpgradeType, PlayerUpgrade> activeUpgrades = new();
 
     void Awake()
@@ -26,19 +23,14 @@ public class PlayerAbilityManager : MonoBehaviour
             instance = this;
     }
 
-    /// <summary>
-    /// Applique ou améliore une upgrade.
-    /// </summary>
     public void ApplyUpgrade(UpgradeType type)
     {
         if (activeUpgrades.ContainsKey(type))
         {
-            // Amélioration de niveau
             activeUpgrades[type].LevelUp();
         }
         else
         {
-            // Première acquisition avec stats de base
             var upgrade = new PlayerUpgrade
             {
                 type = type,
@@ -52,9 +44,6 @@ public class PlayerAbilityManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Renvoie le niveau courant d’une upgrade (0 si non débloquée).
-    /// </summary>
     public int GetUpgradeLevel(UpgradeType type)
     {
         if (activeUpgrades.TryGetValue(type, out var upgrade))

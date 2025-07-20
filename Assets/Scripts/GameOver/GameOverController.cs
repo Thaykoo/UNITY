@@ -38,7 +38,7 @@ public class GameOverManager : MonoBehaviour
 
     public void ShowGameOver()
     {
-        Debug.Log("💀 ShowGameOver() appelé");  // pour vérifier qu'on y arrive
+        Debug.Log("ShowGameOver() appelé"); 
         Time.timeScale = 0f;
 
         float t = SurvivalTimer.FinalTime;

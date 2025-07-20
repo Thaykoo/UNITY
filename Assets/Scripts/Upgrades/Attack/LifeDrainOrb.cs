@@ -13,7 +13,6 @@ public class LifeDrainOrb : MonoBehaviour
     {
         if (center == null) return;
 
-        // Tourne autour du centre
         angle += speed * Time.deltaTime;
         float x = Mathf.Cos(angle) * radius;
         float z = Mathf.Sin(angle) * radius;

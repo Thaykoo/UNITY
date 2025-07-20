@@ -1,4 +1,3 @@
-// PlayerAttack.cs
 using UnityEngine;
 
 [RequireComponent(typeof(Transform))]
@@ -10,7 +9,6 @@ public class PlayerAttack : MonoBehaviour
     public int     attackDamage   = 10;
     public float   attackCooldown = 0.5f;
 
-    [Header("Shot Ability (Sphère orange)")]
     [HideInInspector] public GameObject shotPrefab;
     [HideInInspector] public float       shotSpeed;
     public float       shotLifetime   = 5f;
@@ -39,7 +37,6 @@ public class PlayerAttack : MonoBehaviour
         }
         else
         {
-            // Fallback : raycast classique
             if (Physics.Raycast(transform.position, transform.forward, out var hit, attackRange))
             {
                 var enemy = hit.collider.GetComponent<EnemyController>();

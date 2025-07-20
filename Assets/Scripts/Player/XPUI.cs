@@ -5,7 +5,7 @@ using TMPro;
 public class XPUI : MonoBehaviour
 {
     public Slider xpSlider;
-    public TMP_Text levelText; // ou Text si tu utilises legacy
+    public TMP_Text levelText;
 
     void OnEnable()
     {

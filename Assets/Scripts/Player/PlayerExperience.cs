@@ -8,7 +8,6 @@ public class PlayerExperience : MonoBehaviour
     public float xp = 0f;
     public float xpToNext = 100f;
 
-    // Événement déclenché au passage de niveau
     public static event Action OnLevelUp;
 
     void Awake()
@@ -28,7 +27,6 @@ public class PlayerExperience : MonoBehaviour
 
     void Update()
     {
-        // Test manuel : appuie sur L pour déclencher AddXP et voir les logs
         if (Input.GetKeyDown(KeyCode.L))
         {
             Debug.Log("[Test XP] Touche L détectée, j’ajoute 999 XP.");
@@ -36,9 +34,6 @@ public class PlayerExperience : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Ajoute de l'XP et déclenche OnLevelUp si on passe de lvl 1 à 2.
-    /// </summary>
     public void AddXP(float amount)
     {
         Debug.Log($"[PlayerExperience] AddXP({amount}) appelé.");

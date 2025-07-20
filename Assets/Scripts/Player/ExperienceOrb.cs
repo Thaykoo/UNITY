@@ -3,11 +3,10 @@ using UnityEngine;
 public class ExperienceOrb : MonoBehaviour
 {
     public int xpValue = 1;
-    public float floatSpeed = 1f;  // optionnel : effet de flottement
+    public float floatSpeed = 1f;
 
     void Update()
     {
-        // Léger mouvement de bascule
         transform.position += Vector3.up * Mathf.Sin(Time.time * floatSpeed) * 0.001f;
     }
 

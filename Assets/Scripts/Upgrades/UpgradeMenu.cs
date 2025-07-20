@@ -72,7 +72,6 @@ public class UpgradeMenu : MonoBehaviour
         var so = currentOptions[index];
         PlayerAbilityManager.instance.ApplyUpgrade(so.type);
 
-        // Mise à jour immédiate du label
         int newLvl = PlayerAbilityManager.instance.GetUpgradeLevel(so.type);
         labels[index].text = $"{so.upgradeName} (Lv {newLvl})";
 

@@ -7,9 +7,6 @@ public class FireballProjectile : MonoBehaviour
     float speed;
     int damage;
 
-    /// <summary>
-    /// À appeler immédiatement après Instantiate()
-    /// </summary>
     public void Initialize(Transform target, float speed, int damage)
     {
         this.target = target;
@@ -25,11 +22,9 @@ public class FireballProjectile : MonoBehaviour
             return;
         }
 
-        // Bouge vers la cible
         Vector3 dir = (target.position - transform.position).normalized;
         transform.position += dir * speed * Time.deltaTime;
 
-        // Si on atteind ou dépasse la cible
         if (Vector3.Distance(transform.position, target.position) < 0.2f)
         {
             var ec = target.GetComponent<EnemyController>();

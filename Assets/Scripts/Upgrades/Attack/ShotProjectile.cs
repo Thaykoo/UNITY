@@ -7,9 +7,6 @@ public class ShotProjectile : MonoBehaviour
     float speed;
     int damage;
 
-    /// <summary>
-    /// À appeler juste après Instantiate()
-    /// </summary>
     public void Initialize(Vector3 dir, float speed, int damage)
     {
         this.direction = dir.normalized;
@@ -30,7 +27,6 @@ public class ShotProjectile : MonoBehaviour
             ec.TakeDamage(damage);
             Destroy(gameObject);
         }
-        // Sinon, détruire la balle si elle touche un obstacle (optionnel)
         else if (!other.CompareTag("Player"))
         {
             Destroy(gameObject);
